@@ -1,8 +1,9 @@
 # ===== 构建阶段：编译前端 =====
 FROM node:20-alpine AS frontend-builder
+ENV NODE_OPTIONS="--max-old-space-size=512"
 WORKDIR /frontend
 COPY frontend/package.json frontend/package-lock.json ./
-RUN npm ci
+RUN npm install --no-audit --no-fund --prefer-offline
 COPY frontend/ ./
 RUN npx vite build
 
