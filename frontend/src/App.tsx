@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef, FormEvent } from "react";
+import { useState, useEffect, useCallback, useRef, type FormEvent } from "react";
 import { authApi, studentApi, courseApi } from "./api";
 
 interface User {
@@ -287,7 +287,7 @@ function StudentsTab() {
     setPackages(pkgs); setRecords(recs);
   };
 
-  const onTouchStart = (id: number, e: React.TouchEvent) => {
+  const onTouchStart = (_id: number, e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchCurrentX.current = e.touches[0].clientX;
   };
@@ -800,7 +800,7 @@ function StudentBookTab({ user }: { user: User }) {
             const occupied = isSlotOccupied(slot);
             const h = parseInt(slot.start);
             const nextSlot = h < 19 ? { start: slot.end, end: `${(h + 2).toString().padStart(2, "0")}:00` } : null;
-            const twoHourOccupied = duration === 2 && (occupied || (nextSlot && isSlotOccupied(nextSlot)));
+            const twoHourOccupied = duration === 2 && (occupied || (nextSlot ? isSlotOccupied(nextSlot) : false));
             const blocked = duration === 2 ? twoHourOccupied : occupied;
             const selected = duration === 1
               ? (startTime === slot.start && endTime === slot.end)
@@ -918,7 +918,7 @@ function Row({ label, value }: { label: string; value: string }) {
 }
 
 /* ══════════════════════════════════════════ Coach ══════════════════════════════════════════ */
-function CoachStudentsTab({ user }: { user: User }) {
+function CoachStudentsTab({ user: _user }: { user: User }) {
   const [students, setStudents] = useState<User[]>([]);
   const [selected, setSelected] = useState<User | null>(null);
   const [packages, setPackages] = useState<Package[]>([]);
@@ -1243,7 +1243,7 @@ function CoachManageTab() {
     setEditing(c);
   };
 
-  const onTouchStart = (id: number, e: React.TouchEvent) => {
+  const onTouchStart = (_id: number, e: React.TouchEvent) => {
     touchStartX.current = e.touches[0].clientX;
     touchCurrentX.current = e.touches[0].clientX;
   };

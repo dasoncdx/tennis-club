@@ -33,6 +33,16 @@ def seed_data():
     run_seed()
 
 
+@app.get("/")
+def root():
+    """根路由：优先返回前端页面，否则返回 API 信息"""
+    index_path = os.path.join(STATIC_DIR, "index.html")
+    if os.path.isfile(index_path):
+        from fastapi.responses import FileResponse
+        return FileResponse(index_path)
+    return {"app": "网球俱乐部管理系统", "docs": "/docs"}
+
+
 @app.get("/api/health")
 def health_check():
     return {"status": "ok", "message": "网球俱乐部管理系统运行中"}
