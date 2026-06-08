@@ -1,0 +1,15 @@
+{
+  "services": [
+    {
+      "name": "tennis-club",
+      "type": "dockerfile",
+      "port": 8080,
+      "volumes": [
+        {
+          "name": "data",
+          "mountPath": "/data"
+        }
+      ]
+    }
+  ]
+}
