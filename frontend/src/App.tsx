@@ -1041,9 +1041,13 @@ function CoachBookingsTab({ user }: { user: User }) {
   const handleConfirm = async (e: FormEvent) => {
     e.preventDefault();
     if (!confirming) return;
-    await courseApi.confirmBooking(confirming.id, courtInfo);
-    setConfirming(null); setCourtInfo("");
-    load();
+    try {
+      await courseApi.confirmBooking(confirming.id, courtInfo);
+      setConfirming(null); setCourtInfo("");
+      load();
+    } catch (err: any) {
+      alert(err.message || "确认失败，请重试");
+    }
   };
 
   const pending = bookings.filter(b => b.status === "pending");
@@ -1064,14 +1068,14 @@ function CoachBookingsTab({ user }: { user: User }) {
             <span className="tag tag-red">{pending.length}</span>
           </div>
           {pending.map(b => (
-            <div key={b.id} className="card" style={{ borderLeft: "3px solid #FF9F0A" }}>
+            <div key={b.id} className="card" style={{ borderLeft: "3px solid #FF9F0A", cursor: "pointer" }} onClick={() => setConfirming(b)}>
               <div style={{ fontWeight: 600, color: "#1C1E1F" }}>{b.booking_date} {b.start_time} – {b.end_time}</div>
               <div style={{ fontSize: 14, color: "#8E8E93", marginTop: 4 }}>{b.student_name}</div>
-              <div style={{ fontSize: 12, color: "#B36B00", fontWeight: 500, marginTop: 6 }}>等待确认</div>
+              <div style={{ fontSize: 12, color: "#B36B00", fontWeight: 500, marginTop: 6 }}>点击确认 · 等待处理</div>
               <div className="flex gap-2" style={{ marginTop: 14 }}>
-                <button className="btn-primary flex-1" style={{ padding: "10px 0", fontSize: 13 }} onClick={() => setConfirming(b)}>确认并填场地</button>
+                <button className="btn-primary flex-1" style={{ padding: "10px 0", fontSize: 13 }} onClick={(e) => { e.stopPropagation(); setConfirming(b); }}>确认并填场地</button>
                 <button className="btn-ghost" style={{ color: "#FF453A" }}
-                  onClick={async () => { await courseApi.updateBooking(b.id, { status: "cancelled" }); load(); }}>拒绝</button>
+                  onClick={async (e) => { e.stopPropagation(); await courseApi.updateBooking(b.id, { status: "cancelled" }); load(); }}>拒绝</button>
               </div>
             </div>
           ))}
