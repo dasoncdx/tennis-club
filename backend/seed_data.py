@@ -168,11 +168,11 @@ def run_seed():
     db.commit()
     print(f"✅ 已设置 {dormant_count} 名休眠学员")
 
-    db.close()
-
     total_remaining = sum(p.remaining_hours for p in all_packages)
     print(f"\n📊 演示数据统计: 教练{len(coaches)} | 学员{len(students)} | 课时包{len(all_packages)} | 约课{len(all_bookings)} | 消课{record_count}")
     print(f"💰 剩余课时总量: {total_remaining:.1f} 小时\n")
+
+    db.close()
 
 
 if __name__ == "__main__":
