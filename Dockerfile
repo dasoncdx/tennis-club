@@ -27,4 +27,4 @@ RUN mkdir -p /data
 # Zeabur 默认端口 8080，可通过 PORT 环境变量覆盖
 EXPOSE 8080
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["sh", "-c", "echo \"Starting on port ${PORT:-8080}\" && uvicorn main:app --host 0.0.0.0 --port ${PORT:-8080}"]
