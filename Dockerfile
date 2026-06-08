@@ -18,7 +18,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY backend/ .
 
 # 复制前端构建产物
-COPY --from=frontend-builder /frontend/dist/ ./frontend/dist/
+COPY --from=frontend-builder /frontend/dist/ /frontend/dist/
 
 # Zeabur 持久化卷挂载点
 ENV DATA_DIR=/data
